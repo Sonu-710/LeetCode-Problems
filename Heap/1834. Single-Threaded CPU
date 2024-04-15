@@ -1,0 +1,66 @@
+1834. Single-Threaded CPU
+
+Time Complexity -> O(NlogN)
+Space Complexity-> O(N)
+
+
+class Solution {
+    public int[] getOrder(int[][] nums) {
+        PriorityQueue<tuple> pq=new PriorityQueue<>();
+        
+        int[] ans=new int[nums.length];
+        int index=0;
+        int insert=0;
+        tuple[] arr=new tuple[nums.length];
+        for(int i=0;i<nums.length;i++)
+        arr[i]=new tuple(nums[i][0],nums[i][1],i);
+        Arrays.sort(arr,(a,b)->a.arrivalTime-b.arrivalTime);
+
+        
+        int time=arr[0].arrivalTime;
+        while(insert<nums.length)
+        {
+            while(insert<nums.length && time>=arr[insert].arrivalTime)
+            {
+                pq.add(new tuple(arr[insert].arrivalTime,arr[insert].burstTime,arr[insert].index));
+                insert++;
+            }
+            
+            if(pq.isEmpty())
+            {
+                time=arr[insert].arrivalTime;
+                while(insert<nums.length && time>=arr[insert].arrivalTime)
+                {
+                    pq.add(new tuple(arr[insert].arrivalTime,arr[insert].burstTime,arr[insert].index));
+                    insert++;
+                }
+            }
+            tuple curr=pq.remove();
+            ans[index++]=curr.index;
+            time=time+curr.burstTime;
+        }
+        while(pq.isEmpty()==false)
+        ans[index++]=pq.remove().index;
+        return ans;
+    }
+}
+class tuple implements Comparable<tuple>
+{
+    int arrivalTime;
+    int burstTime;
+    int index;
+    tuple(int arrivalTime,int burstTime,int index)
+    {
+        this.arrivalTime=arrivalTime;
+        this.burstTime=burstTime;
+        this.index=index;
+    }
+    public int compareTo(tuple cmp)
+    {
+        int s=this.burstTime-cmp.burstTime;
+        if(s==0)
+        s=this.index-cmp.index;
+        return s;
+    }
+
+}
