@@ -1,0 +1,44 @@
+451. Sort Characters By Frequency
+
+Time Complexity -> O(N)
+Space Complexity -> O(52), as there can only lowercase and uppercase aplhabets in s
+
+class Solution {
+    public String frequencySort(String s) {
+        HashMap<Character,Integer> map=new HashMap<>();
+        for(int i=0;i<s.length();i++)
+        map.put(s.charAt(i),map.getOrDefault(s.charAt(i),0)+1);
+        PriorityQueue<pair> pq=new PriorityQueue<>();
+        map.forEach((key,value)->
+        {
+            pq.add(new pair(key,value));
+        });
+        int index=0;
+        char[] ans=new char[s.length()];
+        while(pq.isEmpty()==false)
+        {
+            int freq=pq.peek().freq;
+            char val=pq.remove().val;
+            while(freq>0)
+            {
+                ans[index++]=val;
+                freq--;
+            }
+        }
+        return new String(ans);
+    }
+}
+class pair implements Comparable<pair>
+{
+    char val;
+    int freq;
+    pair(char val,int freq)
+    {
+        this.val=val;
+        this.freq=freq;
+    }
+    public int compareTo(pair p)
+    {
+        return p.freq-this.freq;
+    }
+}
