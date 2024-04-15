@@ -1,0 +1,23 @@
+1962. Remove Stones to Minimize the Total
+
+Time Complexity -> O(NLogN)
+Space Complexity -> O(N)
+class Solution {
+    public int minStoneSum(int[] piles, int k) {
+        PriorityQueue<Integer> pq=new PriorityQueue<>(Collections.reverseOrder());
+        for(int it:piles)
+        pq.add(it);
+        while(pq.isEmpty()==false && k>0)
+        {
+            int curr=pq.remove();
+            curr=curr-(int)Math.floor(curr/2.0);
+            if(curr>0)
+            pq.add(curr);
+            k--;
+        }
+        int ans=0;
+        while(pq.isEmpty()==false)
+        ans+=pq.remove();
+        return ans;
+    }
+}
