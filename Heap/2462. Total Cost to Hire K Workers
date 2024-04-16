@@ -1,0 +1,52 @@
+2462. Total Cost to Hire K Workers
+
+Time Complexity -> O(Nlog(2*size))
+Space Complexity -> O(N)
+
+class Solution {
+    public long totalCost(int[] nums, int k, int size) {
+        long ans=0;
+        int start=0;
+        int cnt=0;
+        int end=nums.length-1;
+        PriorityQueue<pair> pq=new PriorityQueue<>();
+        while(start<size)
+        pq.add(new pair(nums[start],start++));
+        while(end>=start && cnt<size)
+        {
+            pq.add(new pair(nums[end],end--));
+            cnt++;
+        }
+        while(k>0)
+        {
+            pair curr=pq.remove();
+            k--;
+            ans+=(long)curr.val;
+            int index=curr.index;
+            if(start>end)
+            continue;
+            if(index<=start)
+            pq.add(new pair(nums[start],start++));
+            else
+            pq.add(new pair(nums[end],end--));  
+        }
+        return ans;
+    }
+}
+class pair implements Comparable<pair>
+{
+    int val;
+    int index;
+    pair(int val,int index)
+    {
+        this.val=val;
+        this.index=index;
+    }
+    public int compareTo(pair p)
+    {
+        int s=this.val-p.val;
+        if(s==0)
+        return this.index-p.index;
+        return s;
+    }
+}
