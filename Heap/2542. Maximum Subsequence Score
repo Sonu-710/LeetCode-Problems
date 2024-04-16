@@ -1,0 +1,62 @@
+2542. Maximum Subsequence Score
+
+Time Complexity -> O(NlogN) + O(NlogK)
+Space Complexity -> O(N)
+
+class Solution {
+    public long maxScore(int[] nums1, int[] nums2, int k) {
+        long ans=0;
+        long val=0;
+        PriorityQueue<Integer> pq=new PriorityQueue<>();
+        tuple[] nums=new tuple[nums2.length];
+        for(int i=0;i<nums2.length;i++)
+        {
+            nums[i]=new tuple(nums2[i],i,nums1[i]);
+        }
+        Arrays.sort(nums);
+        int index=0;
+        int prev=-1;
+        while(index<k)
+        {
+            pq.add(nums[index].reqVal);
+            val+=(long)nums[index].reqVal;
+            prev=nums[index++].val;
+        }
+        
+        ans=val*prev;
+        
+        while(index<nums.length)
+        {
+            tuple curr=nums[index++];
+            prev=curr.val;
+            if(curr.reqVal>pq.peek())
+            {
+                val-=pq.remove();
+                val+=curr.reqVal;
+                pq.add(curr.reqVal);
+            }
+            ans=Math.max(ans,val*prev);
+        }
+        return ans;
+    }
+}
+class tuple implements Comparable<tuple>
+{
+    int val;
+    int index;
+    int reqVal;
+
+    tuple(int val,int index,int reqVal)
+    {
+        this.val=val;
+        this.index=index;
+        this.reqVal=reqVal;
+    }
+    public int compareTo(tuple p)
+    {
+        int s=p.val-this.val;
+        if(s==0)
+        return p.reqVal-this.reqVal;
+        return s;
+    }
+}
