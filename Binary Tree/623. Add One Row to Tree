@@ -1,0 +1,53 @@
+623. Add One Row to Tree
+
+Time Complexity -> O(N)
+Space Compelxity -> O(N)
+
+
+class Solution {
+    public TreeNode addOneRow(TreeNode root, int val, int depth) {
+        if(depth==1)
+        {
+            TreeNode newNode=new TreeNode(val);
+            newNode.left=root;
+            return newNode;
+        }
+        Queue<pair> q=new LinkedList<>();
+        q.add(new pair(root,1));
+        while(q.isEmpty()==false)
+        {
+            pair p=q.remove();
+            TreeNode curr=p.root;
+            int d=p.depth;
+            if(d==depth-1)
+            {
+                TreeNode newNode1=new TreeNode(val);
+                TreeNode left=curr.left;
+                curr.left=newNode1;
+                newNode1.left=left;
+                TreeNode newNode2=new TreeNode(val);
+                TreeNode right=curr.right;
+                curr.right=newNode2;
+                newNode2.right=right;
+            }
+            else
+            {
+                if(curr.left!=null)
+                q.add(new pair(curr.left,d+1));
+                if(curr.right!=null)
+                q.add(new pair(curr.right,d+1));
+            }
+        }
+        return root;
+    }
+}
+class pair
+{
+    TreeNode root;
+    int depth;
+    pair(TreeNode root,int depth)
+    {
+        this.root=root;
+        this.depth=depth;
+    }
+}
