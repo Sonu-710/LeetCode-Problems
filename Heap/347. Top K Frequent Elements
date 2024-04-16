@@ -1,0 +1,77 @@
+347. Top K Frequent Elements
+
+APPROCH -> 1 (Using PriorityQueue)
+
+Time Compelxity -> O(NlogK)
+Space Complexity -> O(logK)
+
+class Solution {
+    public int[] topKFrequent(int[] nums, int k) {
+        HashMap<Integer,Integer> map=new HashMap<>();
+        PriorityQueue<pair> pq=new PriorityQueue<>();
+        int[] size={k};
+        for(int it:nums)
+        map.put(it,map.getOrDefault(it,0)+1);
+        map.forEach((key,value)->{
+            pq.add(new pair(key,value));
+            if(pq.size()>size[0])
+            pq.remove();
+        });
+        int[] ans=new int[k];
+        while(pq.isEmpty()==false)
+        ans[--k]=pq.remove().val;
+        return ans;
+    }
+}
+class pair implements Comparable<pair>
+{
+    int val;
+    int freq;
+    pair(int val,int freq)
+    {
+        this.val=val;
+        this.freq=freq;
+    }
+    public int compareTo(pair p)
+    {
+        return this.freq-p.freq;
+    }
+}
+
+APPROCH -2 (Using Bucket Sort)
+
+
+Time Compelxity -> O(N)
+Space Complexity -> O(N)
+
+class Solution {
+    public int[] topKFrequent(int[] nums, int k) {
+        HashMap<Integer,Integer> map=new HashMap<>();
+        ArrayList<ArrayList<Integer>> adj=new ArrayList<>();
+        for(int i=0;i<nums.length;i++)
+        {
+            adj.add(new ArrayList<>());
+            map.put(nums[i],map.getOrDefault(nums[i],0)+1);
+        }
+        map.forEach((key,value)->
+        {
+            adj.get(value-1).add(key);
+        });
+        int[] ans=new int[k];
+        int index=0;
+        int j=adj.size()-1;
+        while(index<k)
+        {
+            ArrayList<Integer> arr=adj.get(j);
+            for(int it:arr)
+            {
+                ans[index++]=it;
+                if(index==k)
+                return ans;
+            }
+            j--;
+        }
+        return ans;
+
+    }
+}
