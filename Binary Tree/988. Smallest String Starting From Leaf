@@ -1,0 +1,81 @@
+988. Smallest String Starting From Leaf
+
+APPROCH --> 1 , Using BFS
+
+Time Complexity-> O(N)
+Space Complexity -> O(N)
+
+class Solution {
+    public String smallestFromLeaf(TreeNode node) {
+        String min="";
+        Queue<pair> q=new ArrayDeque<>();
+        q.add(new pair(node,""));
+        while(q.isEmpty()==false)
+        {
+            TreeNode root=q.peek().val;
+            String s=q.remove().str;
+            s=Character.toString(root.val+'a')+s;
+            if(isLeaf(root))
+            {
+                if(min.length()==0 || min.compareTo(s)>0)
+                min=s;
+            }
+            if(root.left!=null)
+            q.add(new pair(root.left,s));
+            if(root.right!=null)
+            q.add(new pair(root.right,s));
+        }
+        return min;
+    }
+    static boolean isLeaf(TreeNode root)
+    {
+        if(root.left==null && root.right==null)
+        return true;
+        return false;
+    }
+}
+class pair
+{
+    TreeNode val;
+    String str;
+    pair(TreeNode val,String str)
+    {
+        this.val=val;
+        this.str=str;
+    }
+}
+
+APPROCH --> 2, Using DFS
+
+Time Complexity -> O(N)
+Space Complexity -> O(N), recursive stack space 
+
+class Solution {
+    public String smallestFromLeaf(TreeNode root) {
+        char[] arr=new char[8500];
+        Arrays.fill(arr,'z');
+        String[] min={new String(arr)};
+        dfs(root,"",min);
+        return min[0];
+    }
+    static void dfs(TreeNode root,String ans,String[] min)
+    {
+        if(root==null)  return;
+        if(isLeaf(root)==true)
+        {
+            ans=Character.toString(root.val+'a')+ans;
+            if(ans.compareTo(min[0])<0)
+            min[0]=ans;
+            return;
+        }
+        ans=Character.toString(root.val+'a')+ans;
+        dfs(root.left,ans,min);
+        dfs(root.right,ans,min);
+    }
+    static boolean isLeaf(TreeNode root)
+    {
+        if(root.left==null && root.right==null)
+        return true;
+        return false;
+    }
+}
