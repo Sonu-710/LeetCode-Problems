@@ -1,0 +1,37 @@
+200. Number of Islands
+
+Time Complexity -> O(N*M*4)
+Space Complexity -> O(N*M)
+class Solution {
+    static int[] rows={-1,0,1,0};
+    static int[] cols={0,-1,0,1};
+    public int numIslands(char[][] nums) {
+        int n=nums.length;
+        int m=nums[0].length;
+        int cnt=0;
+        boolean[][] vis=new boolean[n][m];
+        for(int i=0;i<nums.length;i++)
+        {
+            for(int j=0;j<nums[0].length;j++)
+            {
+                if(nums[i][j]=='1' && vis[i][j]==false)
+                {
+                    cnt+=1;
+                    dfs(i,j,nums,vis);
+                }
+            }
+        }
+        return cnt;
+    }
+    static void dfs(int row,int col,char[][] nums,boolean[][] vis)
+    {
+        vis[row][col]=true;
+        for(int i=0;i<4;i++)
+        {
+            int r=row+rows[i];
+            int c=col+cols[i];
+            if(r>=0 && c>=0 && r<vis.length && c<vis[0].length && nums[r][c]=='1' && vis[r][c]==false)
+            dfs(r,c,nums,vis);
+        }
+    }
+}
