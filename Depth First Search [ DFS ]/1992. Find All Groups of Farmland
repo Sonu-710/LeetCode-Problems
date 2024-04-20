@@ -1,0 +1,50 @@
+1992. Find All Groups of Farmland
+
+Time Complexity -> O(N*M*4)
+Space Complexity -> O(N*M)
+
+
+class Solution {
+    static int[] rows={-1,0,1,0};
+    static int[] cols={0,-1,0,1};
+    public int[][] findFarmland(int[][] land) {
+        ArrayList<int[]> ans=new ArrayList<>();
+        boolean[][] vis=new boolean[land.length][land[0].length];
+        for(int i=0;i<land.length;i++)
+        {
+            for(int j=0;j<land[0].length;j++)
+            {
+                if(land[i][j]==1 && vis[i][j]==false)
+                {
+                    int[] res={i,j,i,j};
+                    dfs(i,j,res,land,vis);
+                    ans.add(res);
+                }
+            }
+        }
+        int[][] nums=new int[ans.size()][4];
+        int index=0;
+        for(int[] it:ans)
+        {
+            for(int i=0;i<4;i++)
+            nums[index][i]=it[i];
+            index++;
+        }
+        return nums;
+    }
+    static void dfs(int row,int col,int[] ans,int[][] land,boolean[][] vis)
+    {
+        vis[row][col]=true;
+        ans[0]=Math.min(ans[0],row);
+        ans[1]=Math.min(ans[1],col);
+        ans[2]=Math.max(ans[2],row);
+        ans[3]=Math.max(ans[3],col);
+        for(int i=0;i<4;i++)
+        {
+            int r=row+rows[i];
+            int c=col+cols[i];
+            if(r>=0 && c>=0 && r<land.length && c<land[0].length && land[r][c]==1 && vis[r][c]==false)
+            dfs(r,c,ans,land,vis);
+        }
+    }
+}
