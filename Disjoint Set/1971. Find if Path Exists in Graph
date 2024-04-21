@@ -1,0 +1,52 @@
+1971. Find if Path Exists in Graph
+
+class Solution {
+    public boolean validPath(int n, int[][] edges, int src, int des) {
+        DisjointSet ds=new DisjointSet(n);
+        for(int[] it:edges)
+            ds.union(it[0],it[1]);
+        if(ds.getParent(src)==ds.getParent(des))
+        return true;
+        return false;
+    }
+}
+class DisjointSet
+{
+    int[] size;
+    int[] parent;
+    DisjointSet(int n)
+    {
+        size=new int[n+1];
+        parent=new int[n+1];
+        Arrays.fill(size,1);
+        for(int i=0;i<=n;i++)
+        parent[i]=i;
+    }
+
+    public int getParent(int x)
+    {
+        if(x==parent[x])
+        return x;
+        return parent[x]=getParent(parent[x]);
+    }
+
+    public void union(int u,int v)
+    {
+        int pu=getParent(u);
+        int pv=getParent(v);
+
+        if(pu==pv)
+        return;
+
+        if(size[pu]>size[pv])
+        {
+            parent[pv]=pu;
+            size[pu]+=size[pv];
+        }
+        else
+        {
+            parent[pu]=pv;
+            size[pv]+=size[pu];
+        }
+    }
+}
