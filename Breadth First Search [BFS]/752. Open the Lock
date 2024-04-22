@@ -1,0 +1,51 @@
+752. Open the Lock
+
+class Solution {
+    public int openLock(String[] deadends, String target) {
+        HashSet<String> set=new HashSet<>();
+        for(String it:deadends)
+            set.add(it);
+        Queue<pair> q=new LinkedList<>();
+        if(set.contains("0000"))
+            return -1;
+        q.add(new pair("0000",0));
+        set.add("0000");
+        while(q.isEmpty()==false)
+        {
+            pair curr=q.remove();
+            String s=curr.str;
+            if(s.equals(target))
+            return curr.cnt;
+            char[] arr=s.toCharArray();
+            for(int i=0;i<4;i++)
+            {
+                char prev=arr[i];
+
+                for(int j=-1;j<=1;j++)
+                {
+                    if(j==0)continue;
+                    int ch=(arr[i]-'0')+j+10;
+                    ch=ch%10;
+                    arr[i]=(char)(ch+'0');
+                    String newStr=new String(arr);
+                    if(set.contains(newStr)==false)
+                    q.add(new pair(newStr,curr.cnt+1));
+                    set.add(newStr);
+                    arr[i]=prev;
+                }
+
+            }
+        }
+        return -1;
+    }
+}
+class pair
+{
+    String str;
+    int cnt;
+    pair(String str,int cnt)
+    {
+        this.str=str;
+        this.cnt=cnt;
+    }
+}
