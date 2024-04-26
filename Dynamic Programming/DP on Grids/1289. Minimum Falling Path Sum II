@@ -1,0 +1,32 @@
+1289. Minimum Falling Path Sum II
+
+Time Complexity -> O(n*m*m)
+Space Complexity -> O(n*m)
+
+class Solution {
+    public int minFallingPathSum(int[][] grid) {
+        int n=grid.length;
+        int m=grid[0].length;
+        int[][] dp=new int[n][m+1];
+        for(int[] row:dp)
+        Arrays.fill(row,-1);
+        return getMin(0,-1,grid,dp);
+    }
+    static int getMin(int i,int prev,int[][] nums,int[][] dp)
+    {
+        if(i==nums.length)
+        return 0;
+        if(dp[i][prev+1]==-1)
+        {
+            int min=Integer.MAX_VALUE;
+            for(int k=0;k<nums[i].length;k++)
+            {
+                if(k==prev)
+                    continue;
+                min=Math.min(min,nums[i][k]+getMin(i+1,k,nums,dp));
+            }
+            dp[i][prev+1]=min;
+        }
+        return dp[i][prev+1];
+    }
+}
